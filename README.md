@@ -46,5 +46,5 @@ No frameworks. No build steps.
 
 ## 💛 Credits
 
-Cat images are royalty-free or personal photos.
+Cat images are photos of my cat Deedee with AI generated moods.
 
