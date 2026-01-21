@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cozy Cat Mood</title>
+
+  <style>
+    :root {
+      --bg1: #f7f3ee;
+      --bg2: #eef3f1;
+      --card: rgba(255, 255, 255, 0.88);
+      --text: #2f2f2f;
+      --muted: #6b6b6b;
+      --shadow: 0 12px 40px rgba(0,0,0,0.08);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(800px 400px at 20% 20%, #ffffff 0%, transparent 60%),
+        radial-gradient(700px 420px at 80% 30%, #ffffff 0%, transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+    }
+
+    .wrap {
+      width: min(520px, 100%);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .buttons button {
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: none;
+      background: rgba(255,255,255,0.95);
+      cursor: pointer;
+      font-size: 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .buttons button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+    }
+
+    .card {
+      display: none;
+      margin: 0 auto;
+      max-width: 420px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .media {
+      padding: 14px;
+    }
+
+    /* ✅ FIX: image fits fully, no cropping */
+    .media img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 18px;
+    }
+
+    .content {
+      padding: 0 18px 18px;
+    }
+
+    .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .text {
+      font-size: 16px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* Animations */
+    .fade-in {
+      animation: fadeUp 420ms ease forwards;
+    }
+
+    .image-fade {
+      animation: imageFade 360ms ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes imageFade {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h1>How are you feeling right now?</h1>
+    <p class="subtitle">Pick a mood. I’ll bring you a cat.</p>
+
+    <div class="buttons">
+      <button onclick="showMood('sad')">😿 Sad</button>
+      <button onclick="showMood('anxious')">😵‍💫 Anxious</button>
+      <button onclick="showMood('tired')">😴 Tired</button>
+      <button onclick="showMood('overwhelmed')">🌧️ Overwhelmed</button>
+      <button onclick="showMood('okay')">☀️ Okay</button>
+    </div>
+
+    <div id="card" class="card">
+      <div class="media">
+        <img id="catImage" src="" alt="Cozy cat" />
+      </div>
+      <div class="content">
+        <div id="moodLabel" class="label"></div>
+        <p id="catText" class="text"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const moods = {
+      sad: {
+        label: "Sad",
+        text: "You don’t have to be strong here.",
+        image: "images/sad.jpg"
+      },
+      anxious: {
+        label: "Anxious",
+        text: "Nothing is chasing you right now.",
+        image: "images/anxious.jpg"
+      },
+      tired: {
+        label: "Tired",
+        text: "Rest is not falling behind.",
+        image: "images/tired.jpg"
+      },
+      overwhelmed: {
+        label: "Overwhelmed",
+        text: "One thing at a time is enough.",
+        image: "images/overwhelmed.jpg"
+      },
+      okay: {
+        label: "Okay",
+        text: "This moment is allowed to be simple.",
+        image: "images/okay.jpg"
+      }
+    };
+
+    function showMood(key) {
+      const card = document.getElementById("card");
+      const img = document.getElementById("catImage");
+      const text = document.getElementById("catText");
+      const label = document.getElementById("moodLabel");
+      const mood = moods[key];
+
+      if (getComputedStyle(card).display === "none") {
+        card.style.display = "block";
+      }
+
+      card.classList.remove("fade-in");
+      void card.offsetWidth;
+      card.classList.add("fade-in");
+
+      label.textContent = mood.label;
+      text.textContent = mood.text;
+
+      img.classList.remove("image-fade");
+      img.src = mood.image;
+
+      if (img.complete) {
+        requestAnimationFrame(() => img.classList.add("image-fade"));
+      } else {
+        img.onload = () => img.classList.add("image-fade");
+      }
+    }
+  </script>
+</body>
+</html>
